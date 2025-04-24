@@ -1,6 +1,6 @@
-// components/Sidebar.jsx
-import React from 'react';
-import Link from 'next/link';
+"use client";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Home,
   FileText,
@@ -12,81 +12,220 @@ import {
   BarChart2,
   Settings,
   LogOut,
-  Grid,
-  HelpCircle
-} from 'lucide-react';
-import techrity_logo from '../../../public/techrity-logo.png';
-import Image from 'next/image';
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Menu
+} from "lucide-react";
+import Image from "next/image";
 
-const SidebarItem = ({ icon, title, active, href = '#', comingSoon }) => (
-  <Link href={href}>
-    <div className={`flex items-center px-4 py-3 text-sm cursor-pointer rounded-md mx-2 my-1 transition-colors duration-200
-      ${active ? 'bg-white text-purple-900 font-semibold' : 'text-white/80 hover:bg-purple-800/50'}`}>
-      <div className="w-5 mr-3">{icon}</div>
-      <span>{title}</span>
-      {comingSoon && (
-        <span className="ml-auto text-[10px] text-white/50 italic">Coming Soon</span>
-      )}
+const SidebarItem = ({
+  icon,
+  title,
+  active,
+  href = "#",
+  isCollapsed,
+}) => (
+  <Link href={href} className="block w-full">
+    <div
+      className={`flex items-center px-3 py-2 text-xs md:text-sm cursor-pointer rounded-md mx-1 my-1 transition-colors duration-200
+      ${active
+        ? "bg-white text-purple-900 font-semibold"
+        : "text-white/80 hover:bg-purple-800/50"}`}
+    >
+      <div className="w-4 mr-2">{icon}</div>
+      {/* Hide text when collapsed on all screen sizes */}
+      <span className={`${isCollapsed ? 'hidden' : 'inline-block'}`}>
+        {title}
+      </span>
     </div>
   </Link>
 );
 
-export default function Sidebar({ activeTab }) {
+export default function Sidebar({ activeTab, isOpen, setIsOpen }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Auto-collapse on medium screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024 && window.innerWidth >= 768) {
+        setIsCollapsed(true);
+      } else if (window.innerWidth >= 1024) {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Set up the event listener
+    window.addEventListener('resize', handleResize);
+
+    // Clean up
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (
+        isOpen &&
+        !e.target.closest(".sidebar-container") &&
+        !e.target.closest(".sidebar-toggle")
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOpen, setIsOpen]);
+
+  const toggleSidebarCollapse = () => {
+    console.log("Toggling Sidebar Mode", !isCollapsed);
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
-    <div className="w-[260px] bg-[#340260] text-white flex flex-col h-screen fixed">
-      {/* Logo Header */}
-      <div className="flex items-center justify-between px-6 py-6 ">
-        <div className="flex items-center">
-        <Image 
-            src={techrity_logo} // Place your logo in the public folder
-            alt="Techrity Logo"
-            width={150}
-            height={150}
-            className="mr-2"
+    <>
+      {/* Sidebar Overlay (Mobile) */}
+      {isOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setIsOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Mobile Toggle Button
+      <button 
+        className="md:hidden fixed top-4 left-4 z-50 bg-purple-600 p-2 rounded-md sidebar-toggle"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Sidebar"
+      >
+        <Menu size={20} color="white" />
+      </button> */}
+
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full 
+          ${isCollapsed ? 'w-16' : 'w-52'} 
+          bg-[#340260] text-white z-40 flex flex-col shadow-lg transition-all duration-300 sidebar-container
+          ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:relative`}
+      >
+        {/* Logo Header with toggle button */}
+        <div className="flex items-center justify-between p-4 border-b border-purple-800/30">
+          {/* Show logo on small screens or when not collapsed on medium/large */}
+          <div className={`h-8 w-24 relative ${isCollapsed ? 'hidden' : 'block'}`}>
+            <Image
+              src="/techrity-logo.png"
+              alt="Techrity Logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          
+          {/* Toggle collapse button - visible on all screen sizes */}
+          <button
+            onClick={toggleSidebarCollapse}
+            className="text-white hover:bg-purple-700/50 p-1.5 rounded-md ml-auto"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
+        </div>
+
+        {/* Close Button (Mobile) */}
+        <div className="md:hidden flex justify-end px-4 py-2">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-white bg-purple-700 hover:bg-purple-600 p-1.5 rounded-md"
+            aria-label="Close sidebar"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto pt-2 space-y-2 px-2 py-2 scrollbar-thin">
+          <SidebarItem
+            icon={<Home size={16} />}
+            title="Dashboard" 
+            active={activeTab === "dashboard"}
+            href="/dashboard"
+            isCollapsed={isCollapsed}
           />
-          {/* <span className="font-semibold text-lg">techrity</span> */}
-        </div>
-        <div className="border border-white/20 p-1 rounded">
-          <Grid size={16} />
-        </div>
+          <SidebarItem
+            icon={<FileText size={16} />}
+            title="Programs" 
+            active={activeTab === "programs"}
+            href="/programs"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<Activity size={16} />}
+            title="Activities" 
+            active={activeTab === "activities"}
+            href="/activities"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<Users size={16} />}
+            title="Users" 
+            active={activeTab === "users"}
+            href="/users"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<MessageSquare size={16} />}
+            title="Forums" 
+            active={activeTab === "forums"}
+            href="/forums"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<DollarSign size={16} />}
+            title="Finances" 
+            active={activeTab === "finances"}
+            href="/finances"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<Award size={16} />}
+            title="Rewards" 
+            active={activeTab === "rewards"}
+            href="/rewards"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<BarChart2 size={16} />}
+            title="Analytics" 
+            active={activeTab === "analytics"}
+            href="/analytics"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<Settings size={16} />}
+            title="Settings" 
+            active={activeTab === "settings"}
+            href="/settings"
+            isCollapsed={isCollapsed}
+          />
+          <SidebarItem
+            icon={<LogOut size={16} />}
+            title="Log Out" 
+            active={activeTab === "logout"}
+            href="/logout"
+            isCollapsed={isCollapsed}
+          />
+        </nav>
       </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 space-y-2 overflow-y-auto pt-8">
-        <SidebarItem icon={<Home size={18} />} title="Dashboard" active={activeTab === 'dashboard'} href="/dashboard" />
-        <SidebarItem icon={<FileText size={18} />} title="Programs" active={activeTab === 'programs'} href="/programs" />
-        <SidebarItem icon={<Activity size={18} />} title="Activities" active={activeTab === 'activities'} href="/activities" />
-        <SidebarItem icon={<Users size={18} />} title="Users" active={activeTab === 'users'} href="/users" />
-        <SidebarItem icon={<MessageSquare size={18} />} title="Forums" active={activeTab === 'forums'} href="/forums" />
-        <SidebarItem icon={<DollarSign size={18} />} title="Finances" active={activeTab === 'finances'} href="/finances" />
-        <SidebarItem icon={<Award size={18} />} title="Rewards" active={activeTab === 'rewards'} href="/rewards" />
-        <SidebarItem icon={<BarChart2 size={18} />} title="Analytics" active={activeTab === 'analytics'} href="/analytics" comingSoon />
-        <SidebarItem icon={<Settings size={18} />} title="Settings" active={activeTab === 'settings'} href="/settings" />
-        <SidebarItem icon={<LogOut size={18} />} title="Log Out" active={activeTab === 'logout'} href="/logout" />
-      </nav>
-
-      {/* Help Desk + Toggle */}
-      <div className="px-4 pt-3 pb-8  border-purple-800 mt-auto">
-        <div className="bg-[#4c2173] p-3 rounded-md text-xs mb-4">
-          <div className="flex items-start gap-2">
-            <HelpCircle size={14} className="mt-0.5 text-white/60" />
-            <div>
-              <p className="text-white/80 leading-tight">Got some questions, enquiries or need help?</p>
-              <button className="text-yellow-400 underline mt-1">
-                Visit Techrity Help Desk here
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Classic Mode Toggle */}
-        <div className="flex items-center justify-between text-xs">
-          <span>Switch to Classic Mode</span>
-          <div className="relative w-10 h-5 bg-gray-600 rounded-full">
-            <div className="absolute right-0 w-5 h-5 bg-white rounded-full shadow-md"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

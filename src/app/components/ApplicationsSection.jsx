@@ -30,7 +30,7 @@ function ApplicationRow({ image, name, email, type = "Mentor" }) {
             </div>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center ml-8 md:ml-0">
           <button className="text-xs py-2 px-6 bg-[#FFEDED] border border-[#D09696] rounded text-red-500 hover:bg-red-50 mr-2">
             Reject
           </button>
@@ -41,7 +41,7 @@ function ApplicationRow({ image, name, email, type = "Mentor" }) {
       </div>
 
       {type === "Mentor" && (
-        <div className="flex flex-wrap gap-2 px-3 py-2">
+        <div className="flex flex-wrap w-full  gap-2 md:px-3 md:py-2">
           <span className="bg-[#F3ECF9] text-[#9985A7] text-[12px] font-medium px-3 py-1 rounded-[5px]  border border-[#DDCEEE]">
             Product Designer
           </span>
@@ -130,7 +130,7 @@ export default function ApplicationsSection() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg  overflow-hidden">
+      <div className="bg-white rounded-lg  overflow-x-auto">
         <div className="border-gray-200 p-6 py-3 text-sm text-[#7D8DA6] font-medium">
           Mentors
         </div>

@@ -66,7 +66,7 @@ export default function RecentActivitiesSection() {
           <div className="w-6 h-6 mr-2 flex items-center justify-center">
             <div className=""><Menu size={20} /></div>
           </div>
-          <h2 className="text-lg text-[#B0B0B0] font-[700]">Recent Activities</h2>
+          <h2 className="text-[16px] md:text-lg text-[#B0B0B0] font-[700]">Recent Activities</h2>
         </div>
         <div className="flex items-center space-x-4">
           <button className="text-xs text-[#6F01D0] text-[12px] font-[600]">See all</button>

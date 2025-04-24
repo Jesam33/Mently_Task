@@ -46,7 +46,7 @@ export default function ProgramsSection() {
   ];
 
   return (
-    <div className="mb-8">
+    <div className="">
       <div className="flex  items-center justify-between mb-4">
         <div className="flex items-center">
           <div className="w-6 h-6 mr-2 flex items-center justify-center">

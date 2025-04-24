@@ -7,7 +7,7 @@ import studentImg from "../../../public/student.jpg";
 
 function MentorCard({ name, role, image }) {
   return (
-    <div className="flex items-center justify-between p-3 border-b border-gray-100">
+    <div className="flex items-center justify-between p-1 md:p-3 border-b border-gray-100">
       <div className="flex items-center">
         <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
            <Image
