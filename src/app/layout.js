@@ -4,12 +4,13 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import "./globals.css";
 import { usePathname } from "next/navigation";
+import ClientLayout from "./ClientLayout";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
 
   const getActiveTab = () => {
-    if (pathname.includes("/")) return "dashboard";
+    if (pathname === "/" || pathname === "") return "dashboard";
     if (pathname.includes("/programs")) return "programs";
     if (pathname.includes("/activities")) return "activities";
     if (pathname.includes("/users")) return "users";
@@ -18,7 +19,7 @@ export default function RootLayout({ children }) {
     if (pathname.includes("/rewards")) return "rewards";
     if (pathname.includes("/analytics")) return "analytics";
     if (pathname.includes("/settings")) return "settings";
-    return "";
+    return "dashboard";
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -29,25 +30,27 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en" className="h-full">
-      <body className="h-full overflow-hidden">
-        <div className="flex h-full">
-          <Sidebar
-            activeTab={activeTab}
-            isOpen={isSidebarOpen}
-            setIsOpen={setIsSidebarOpen}
-          />
-
-          <div className="flex flex-col flex-1 h-full overflow-hidden">
-            <Header
-              isSidebarOpen={isSidebarOpen}
-              onToggleSidebar={toggleSidebar}
+      <body className="h-full">
+        <ClientLayout>
+          <div className="flex h-screen w-full overflow-hidden">
+            <Sidebar
+              activeTab={activeTab}
+              isOpen={isSidebarOpen}
+              setIsOpen={setIsSidebarOpen}
             />
 
-            <div className="flex-1 overflow-y-auto  bg-[#f4f5fa]">
-              {children}
+            <div className="flex flex-col flex-1 h-full w-full overflow-hidden">
+              <Header
+                isSidebarOpen={isSidebarOpen}
+                onToggleSidebar={toggleSidebar}
+              />
+
+              <main className="flex-1 overflow-y-auto bg-[#f4f5fa] w-full">
+                {children}
+              </main>
             </div>
           </div>
-        </div>
+        </ClientLayout>
       </body>
     </html>
   );
