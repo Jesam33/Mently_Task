@@ -24,22 +24,22 @@ export default function ProgramCard({
             alt="Program cover" 
             width={400} 
             height={150} 
-            className="w-full h-20 object-cover" 
+            className="w-full h-24 object-cover" 
           /> 
           <div className="absolute top-2 right-2 p-1 z-10 bg-black/30 rounded-full"> 
             <Settings size={20} className="text-white" /> 
           </div> 
    
-          <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-black/10">
+          <div className="absolute bottom-0  inset-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-black/10">
             <h3 className="text-white text-[16px] font-bold max-w-[80%] leading-[1px"> 
               {title} 
             </h3> 
             <div 
-              className="flex items-center px-3 gap-1 w-fit py-0.5 rounded-full " 
+              className="flex items-center px-3 gap-1 mt-2 w-fit py-0.5 rounded-full " 
               style={{ backgroundColor: bgColor }} 
             > 
               <div 
-                className="w-1 h-1 rounded-full" 
+                className="w-2 h-2  rounded-full" 
                 style={{ backgroundColor: circleColor }} 
               ></div> 
               <span 

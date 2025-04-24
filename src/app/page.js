@@ -19,12 +19,12 @@ export default function DashboardPage() {
             <ManageWidgets />
           </div>
 
-          {/* <div className="hidden lg:flex items-center justify-between mb-4">
+          {/* <div className="hidden xl:flex items-center justify-between mb-4">
           <WelcomeBanner username="Blessing" />
           </div> */}
           
           {/* Mobile welcome banner */}
-          <div className="lg:hidden mb-4">
+          <div className="xl:hidden mb-4">
             <h1 className="text-2xl font-bold flex items-center">
               <span className="text-[#1F0954]">Welcome Blessing</span>
               <span className="ml-2 text-yellow-400">👋</span>
@@ -32,15 +32,15 @@ export default function DashboardPage() {
           </div>
           
           {/* Desktop welcome banner */}
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <WelcomeBanner username="Blessing" />
           </div>
           
           {/* Main content area with responsive layout */}
-          <div className="flex flex-col lg:flex-row gap-4 lg:gap-[2%]">
+          <div className="flex flex-col xl:flex-row gap-4 xl:gap-[2%]">
             {/* Left column - becomes full width on medium and small screens */}
-            <div className="w-full lg:w-[339px] flex flex-col">
-              <div className="bg-white rounded-lg p-4 mb-6">
+            <div className="w-full xl:w-[339px] flex flex-col">
+              <div className="bg-white rounded xl p-4 mb-6">
                 <ProgramsSection />
               </div>
               <div className="">
@@ -50,17 +50,17 @@ export default function DashboardPage() {
             
             {/* Right column - becomes full width on medium and small screens */}
             <div className="flex-1">
-              <div className="bg-white rounded-lg mb-4">
+              <div className="bg-white rounded xl mb-4">
                 <GroupCallsSection />
               </div>
               
               {/* Split section - becomes stacked on medium and small screens */}
-              <div className="flex flex-col lg:flex-row gap-4">
-                <div className="bg-white w-full lg:w-[60%] mb-4 md:mb-6">
+              <div className="flex flex-col xl:flex-row gap-4">
+                <div className="bg-white w-full xl:w-[60%] mb-4 md:mb-6">
                   <ApplicationsSection />
                 </div>
-                <div className="w-full lg:w-[40%]">
-                  <div className="bg-white p-4 rounded-lg mb-4">
+                <div className="w-full xl:w-[40%]">
+                  <div className="bg-white p-4 rounded-xl mb-4">
                     <MentorsSection />
                   </div>
                   <div className="bg-white p-4 rounded-xl">
